@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css" />
+        <link rel="stylesheet" type="text/css" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/label.css" />
+        <link rel="stylesheet" href="css/MarkerCluster.css" />
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+        <link rel="stylesheet" href="css/leaflet.draw.css" />
+        <link rel="stylesheet" href="css/leaflet.measurecontrol.css" />
+        <script src="js/leaflet.js"></script>
+        <script src="js/OSMBuildings-Leaflet.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/label.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/leaflet.draw.js"></script>
+        <script src="js/leaflet.measurecontrol.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="data/json_AOIselectedfeatures0.js"></script>
+        <script src="data/json_AOIRoads1.js"></script>
+        <script>
+        L.ImageOverlay.include({
+            getBounds: function () {
+                return this._bounds;
+            }
+        });
+        var map = L.map('map', {
+            measureControl:true,
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[42.385900972,-83.0669077974],[42.3923984321,-83.0501660713]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
+        var feature_group = new L.featureGroup([]);
+        var bounds_group = new L.featureGroup([]);
+        var raster_group = new L.LayerGroup([]);
+        var initialOrder = new Array();
+        var layerOrder = new Array();
+        function stackLayers() {
+            for (index = 0; index < initialOrder.length; index++) {
+                map.removeLayer(initialOrder[index]);
+                map.addLayer(initialOrder[index]);
+            }
+        }
+        function restackLayers() {
+            for (index = 0; index < layerOrder.length; index++) {
+                layerOrder[index].bringToFront();
+            }
+        }
+        layerControl = L.control.layers({},{},{collapsed:false});
+        function pop_AOIselectedfeatures0(feature, layer) {
+            var popupContent = '<table><tr><td colspan="2">' + (feature.properties['ownername1'] !== null ? Autolinker.link(String(feature.properties['ownername1'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['propstreet'] !== null ? Autolinker.link(String(feature.properties['propstreet'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['propcity'] !== null ? Autolinker.link(String(feature.properties['propcity'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['propstate'] !== null ? Autolinker.link(String(feature.properties['propstate'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['propzip'] !== null ? Autolinker.link(String(feature.properties['propzip'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['packedParc'] !== null ? Autolinker.link(String(feature.properties['packedParc'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['Shape_Leng'] !== null ? Autolinker.link(String(feature.properties['Shape_Leng'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['Shape_STAr'] !== null ? Autolinker.link(String(feature.properties['Shape_STAr'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['Shape_STLe'] !== null ? Autolinker.link(String(feature.properties['Shape_STLe'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['Shape_Le_1'] !== null ? Autolinker.link(String(feature.properties['Shape_Le_1'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['Shape_Area'] !== null ? Autolinker.link(String(feature.properties['Shape_Area'])) : '') + '</td></tr></table>';
+            layer.bindPopup(popupContent);
+        }
+
+        function doStyleAOIselectedfeatures0(feature) {
+            return {
+                weight: 1.04,
+                color: '#000000',
+                fillColor: '#0cc38c',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                opacity: 1.0,
+                fillOpacity: 1.0
+            };
+        }
+        var json_AOIselectedfeatures0JSON = new L.geoJson(json_AOIselectedfeatures0, {
+            onEachFeature: pop_AOIselectedfeatures0,
+            style: doStyleAOIselectedfeatures0
+        });
+        layerOrder[layerOrder.length] = json_AOIselectedfeatures0JSON;
+        bounds_group.addLayer(json_AOIselectedfeatures0JSON);
+        initialOrder[initialOrder.length] = json_AOIselectedfeatures0JSON;
+        feature_group.addLayer(json_AOIselectedfeatures0JSON);
+        function pop_AOIRoads1(feature, layer) {
+            var popupContent = '<table><tr><td colspan="2">' + (feature.properties['osm_id'] !== null ? Autolinker.link(String(feature.properties['osm_id'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['access'] !== null ? Autolinker.link(String(feature.properties['access'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['aerialway'] !== null ? Autolinker.link(String(feature.properties['aerialway'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['aeroway'] !== null ? Autolinker.link(String(feature.properties['aeroway'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['amenity'] !== null ? Autolinker.link(String(feature.properties['amenity'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['area'] !== null ? Autolinker.link(String(feature.properties['area'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['barrier'] !== null ? Autolinker.link(String(feature.properties['barrier'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['bicycle'] !== null ? Autolinker.link(String(feature.properties['bicycle'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['brand'] !== null ? Autolinker.link(String(feature.properties['brand'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['bridge'] !== null ? Autolinker.link(String(feature.properties['bridge'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['boundary'] !== null ? Autolinker.link(String(feature.properties['boundary'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['building'] !== null ? Autolinker.link(String(feature.properties['building'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['covered'] !== null ? Autolinker.link(String(feature.properties['covered'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['culvert'] !== null ? Autolinker.link(String(feature.properties['culvert'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['cutting'] !== null ? Autolinker.link(String(feature.properties['cutting'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['disused'] !== null ? Autolinker.link(String(feature.properties['disused'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['embankment'] !== null ? Autolinker.link(String(feature.properties['embankment'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['foot'] !== null ? Autolinker.link(String(feature.properties['foot'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['harbour'] !== null ? Autolinker.link(String(feature.properties['harbour'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['highway'] !== null ? Autolinker.link(String(feature.properties['highway'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['historic'] !== null ? Autolinker.link(String(feature.properties['historic'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['horse'] !== null ? Autolinker.link(String(feature.properties['horse'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['junction'] !== null ? Autolinker.link(String(feature.properties['junction'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['landuse'] !== null ? Autolinker.link(String(feature.properties['landuse'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['layer'] !== null ? Autolinker.link(String(feature.properties['layer'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['leisure'] !== null ? Autolinker.link(String(feature.properties['leisure'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['lock'] !== null ? Autolinker.link(String(feature.properties['lock'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['man_made'] !== null ? Autolinker.link(String(feature.properties['man_made'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['military'] !== null ? Autolinker.link(String(feature.properties['military'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['motorcar'] !== null ? Autolinker.link(String(feature.properties['motorcar'])) : '') + '</td></tr><tr><td colspan="2"><strong>name</strong><br />' + (feature.properties['name'] !== null ? Autolinker.link(String(feature.properties['name'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['natural'] !== null ? Autolinker.link(String(feature.properties['natural'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['oneway'] !== null ? Autolinker.link(String(feature.properties['oneway'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['operator'] !== null ? Autolinker.link(String(feature.properties['operator'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['population'] !== null ? Autolinker.link(String(feature.properties['population'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['power'] !== null ? Autolinker.link(String(feature.properties['power'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['place'] !== null ? Autolinker.link(String(feature.properties['place'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['railway'] !== null ? Autolinker.link(String(feature.properties['railway'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['ref'] !== null ? Autolinker.link(String(feature.properties['ref'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['religion'] !== null ? Autolinker.link(String(feature.properties['religion'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['route'] !== null ? Autolinker.link(String(feature.properties['route'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['service'] !== null ? Autolinker.link(String(feature.properties['service'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['shop'] !== null ? Autolinker.link(String(feature.properties['shop'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['sport'] !== null ? Autolinker.link(String(feature.properties['sport'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['surface'] !== null ? Autolinker.link(String(feature.properties['surface'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['toll'] !== null ? Autolinker.link(String(feature.properties['toll'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['tourism'] !== null ? Autolinker.link(String(feature.properties['tourism'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['tower:type'] !== null ? Autolinker.link(String(feature.properties['tower:type'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['tracktype'] !== null ? Autolinker.link(String(feature.properties['tracktype'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['tunnel'] !== null ? Autolinker.link(String(feature.properties['tunnel'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['water'] !== null ? Autolinker.link(String(feature.properties['water'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['waterway'] !== null ? Autolinker.link(String(feature.properties['waterway'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['wetland'] !== null ? Autolinker.link(String(feature.properties['wetland'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['width'] !== null ? Autolinker.link(String(feature.properties['width'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['wood'] !== null ? Autolinker.link(String(feature.properties['wood'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['z_order'] !== null ? Autolinker.link(String(feature.properties['z_order'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['way_area'] !== null ? Autolinker.link(String(feature.properties['way_area'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['tags'] !== null ? Autolinker.link(String(feature.properties['tags'])) : '') + '</td></tr></table>';
+            layer.bindPopup(popupContent);
+        }
+
+        function doStyleAOIRoads1(feature) {
+            return {
+                weight: 1.04,
+                color: '#68a0f4',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                opacity: 1.0
+            };
+        }
+        var json_AOIRoads1JSON = new L.geoJson(json_AOIRoads1, {
+            onEachFeature: pop_AOIRoads1,
+            style: doStyleAOIRoads1
+        });
+        layerOrder[layerOrder.length] = json_AOIRoads1JSON;
+        bounds_group.addLayer(json_AOIRoads1JSON);
+        initialOrder[initialOrder.length] = json_AOIRoads1JSON;
+        feature_group.addLayer(json_AOIRoads1JSON);
+        raster_group.addTo(map);
+        feature_group.addTo(map);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/AOIRoads1.png" /> AOI_Roads': json_AOIRoads1JSON,'<img src="legend/AOIselectedfeatures0.png" /> AOI_selected_features': json_AOIselectedfeatures0JSON,},{collapsed:false}).addTo(map);
+        L.control.scale({options: {position: 'bottomleft', maxWidth: 100, metric: true, imperial: false, updateWhenIdle: false}}).addTo(map);
+        stackLayers();
+        map.on('overlayadd', restackLayers);
+        </script>
+    </body>
+</html>
